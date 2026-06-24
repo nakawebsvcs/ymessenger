@@ -17,7 +17,8 @@ app.use(cors());
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../dist')));
 
-  app.get('*', (req, res) => {
+  // Catch-all route for React Router (Express 5 compatible)
+  app.use((req, res) => {
     res.sendFile(path.join(__dirname, '../dist/index.html'));
   });
 }
