@@ -19,7 +19,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(to bottom, #6001D2, #4c0196);
+  background: linear-gradient(to bottom, #A855F7 0%, #7C3AED 100%);
   color: white;
   padding: 10px 15px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -103,9 +103,23 @@
 .user-avatar {
   width: 24px;
   height: 24px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-radius: 50%;
   flex-shrink: 0;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.user-avatar.rainbow-avatar {
+  background: linear-gradient(
+    135deg,
+    #FF0000 0%,
+    #FF7F00 14.3%,
+    #D4AF37 28.6%,
+    #00FF00 42.9%,
+    #0000FF 57.2%,
+    #4B0082 71.5%,
+    #9400D3 85.8%,
+    #FF0000 100%
+  );
 }
 
 .chat-main {
@@ -201,10 +215,12 @@
 
 .toolbar {
   display: flex;
-  gap: 5px;
+  gap: 6px;
   padding: 8px;
   background: #e8e8e8;
   border-bottom: 1px solid #ccc;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .toolbar-btn {
@@ -333,4 +349,188 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+.rainbow-text {
+  background: linear-gradient(
+    90deg,
+    #FF0000 0%,
+    #FF7F00 16.67%,
+    #D4AF37 33.33%,
+    #00FF00 50%,
+    #0000FF 66.67%,
+    #4B0082 83.33%,
+    #9400D3 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Toolbar Divider */
+.toolbar-divider {
+  width: 1px;
+  height: 24px;
+  background: #ccc;
+  margin: 0 2px;
+}
+
+.format-select {
+  padding: 4px 6px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 12px;
+  background: white;
+  cursor: pointer;
+}
+
+.font-select-toolbar {
+  min-width: 110px;
+}
+
+.size-select {
+  min-width: 55px;
+}
+
+.format-btn {
+  width: 28px;
+  height: 26px;
+  border: 1px solid #ccc;
+  background: white;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.format-btn:hover {
+  background: #f0f0f0;
+  border-color: #999;
+}
+
+.format-btn.active {
+  background: #6001D2;
+  color: white;
+  border-color: #6001D2;
+}
+
+.color-picker-container {
+  position: relative;
+}
+
+.color-btn {
+  width: 32px;
+  height: 26px;
+  border: 1px solid #ccc;
+  background: white;
+  border-radius: 3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  transition: all 0.2s;
+}
+
+.color-btn:hover {
+  background: #f0f0f0;
+  border-color: #999;
+}
+
+.color-indicator {
+  width: 20px;
+  height: 16px;
+  border: 1px solid #666;
+  border-radius: 2px;
+}
+
+.rainbow-indicator {
+  background: linear-gradient(
+    90deg,
+    #FF0000 0%,
+    #FF7F00 16.67%,
+    #D4AF37 33.33%,
+    #00FF00 50%,
+    #0000FF 66.67%,
+    #4B0082 83.33%,
+    #9400D3 100%
+  );
+}
+
+.color-dropdown {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  margin-bottom: 5px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+  min-width: 120px;
+}
+
+.color-swatch-toolbar {
+  width: 28px;
+  height: 28px;
+  border: 2px solid #ccc;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.color-swatch-toolbar:hover {
+  transform: scale(1.1);
+  border-color: #999;
+}
+
+.color-swatch-toolbar.selected {
+  border-color: #6001D2;
+  box-shadow: 0 0 0 2px rgba(96, 1, 210, 0.3);
+}
+
+.color-swatch-toolbar.rainbow {
+  background: linear-gradient(
+    90deg,
+    #FF0000 0%,
+    #FF7F00 16.67%,
+    #D4AF37 33.33%,
+    #00FF00 50%,
+    #0000FF 66.67%,
+    #4B0082 83.33%,
+    #9400D3 100%
+  );
+}
+
+.color-swatches-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.custom-color-picker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 6px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.custom-color-label {
+  font-size: 11px;
+  color: #666;
+  font-weight: 500;
+}
+
+.custom-color-input {
+  width: 40px;
+  height: 28px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  cursor: pointer;
+  padding: 2px;
 }

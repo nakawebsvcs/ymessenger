@@ -136,6 +136,19 @@
   outline-offset: 1px;
 }
 
+.color-swatch.rainbow {
+  background: linear-gradient(
+    90deg,
+    #FF0000 0%,
+    #FF7F00 16.67%,
+    #D4AF37 33.33%,
+    #00FF00 50%,
+    #0000FF 66.67%,
+    #4B0082 83.33%,
+    #9400D3 100%
+  );
+}
+
 .font-controls {
   display: flex;
   gap: 10px;
@@ -201,6 +214,22 @@
 .preview-text {
   font-size: 14px;
   min-height: 20px;
+}
+
+.preview-text.rainbow-text {
+  background: linear-gradient(
+    90deg,
+    #FF0000 0%,
+    #FF7F00 16.67%,
+    #D4AF37 33.33%,
+    #00FF00 50%,
+    #0000FF 66.67%,
+    #4B0082 83.33%,
+    #9400D3 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .login-btn {

@@ -26,8 +26,8 @@ function LoginScreen({ onLogin }) {
   };
 
   const colors = [
-    '#0000FF', '#FF0000', '#00FF00', '#FF00FF',
-    '#00FFFF', '#800080', '#FFA500', '#000000'
+    '#0000FF', '#FF0000', '#008000', '#FF00FF',
+    '#008B8B', '#800080', '#FFA500', '#000000', 'rainbow'
   ];
 
   const fonts = ['Arial', 'Comic Sans MS', 'Courier New', 'Times New Roman', 'Verdana'];
@@ -69,10 +69,10 @@ function LoginScreen({ onLogin }) {
                 <button
                   key={c}
                   type="button"
-                  className={`color-swatch ${color === c ? 'selected' : ''}`}
-                  style={{ backgroundColor: c }}
+                  className={`color-swatch ${color === c ? 'selected' : ''} ${c === 'rainbow' ? 'rainbow' : ''}`}
+                  style={c !== 'rainbow' ? { backgroundColor: c } : {}}
                   onClick={() => setColor(c)}
-                  title={c}
+                  title={c === 'rainbow' ? 'Rainbow' : c}
                 />
               ))}
             </div>
@@ -123,9 +123,9 @@ function LoginScreen({ onLogin }) {
           <div className="preview">
             <label>Preview:</label>
             <div
-              className="preview-text"
+              className={`preview-text ${color === 'rainbow' ? 'rainbow-text' : ''}`}
               style={{
-                color: color,
+                color: color !== 'rainbow' ? color : undefined,
                 fontFamily: fontStyle.fontFamily,
                 fontWeight: fontStyle.bold ? 'bold' : 'normal',
                 fontStyle: fontStyle.italic ? 'italic' : 'normal',

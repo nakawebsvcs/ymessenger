@@ -55,11 +55,12 @@ io.on('connection', (socket) => {
     });
   });
 
-  socket.on('message:send', ({ text, username, color, fontStyle }) => {
+  socket.on('message:send', ({ text, username, usernameColor, messageColor, fontStyle }) => {
     io.emit('message:receive', {
       type: 'user',
       username,
-      color,
+      usernameColor,
+      messageColor,
       fontStyle,
       text,
       timestamp: new Date().toISOString()

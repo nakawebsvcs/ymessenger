@@ -7,6 +7,9 @@ function ChatWindow({ socket, user, onLogout }) {
   const [messageInput, setMessageInput] = useState('');
   const [users, setUsers] = useState([]);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [messageColor, setMessageColor] = useState(user.color);
+  const [messageFontStyle, setMessageFontStyle] = useState(user.fontStyle);
+  const [showColorPicker, setShowColorPicker] = useState(false);
   const messagesEndRef = useRef(null);
 
   // Audio refs for all Yahoo! Messenger sounds
@@ -21,6 +24,7 @@ function ChatWindow({ socket, user, onLogout }) {
 
   useEffect(() => {
     socket.on('message:receive', (message) => {
+      console.log('Received message:', message);
       setMessages(prev => [...prev, message]);
       // Play chime sound when receiving a message from another user
       if (message.type === 'user' && message.username !== user.username) {
@@ -140,12 +144,15 @@ function ChatWindow({ socket, user, onLogout }) {
   const handleSendMessage = (e) => {
     e.preventDefault();
     if (messageInput.trim()) {
-      socket.emit('message:send', {
+      const messageData = {
         text: messageInput,
         username: user.username,
-        color: user.color,
-        fontStyle: user.fontStyle
-      });
+        usernameColor: user.color,  // Original color from sign-in
+        messageColor: messageColor,  // Current message formatting color
+        fontStyle: messageFontStyle
+      };
+      console.log('Sending message:', messageData);
+      socket.emit('message:send', messageData);
       setMessageInput('');
       // Play chime sound when sending a message
       playChimeSound();
@@ -161,6 +168,22 @@ function ChatWindow({ socket, user, onLogout }) {
     setShowEmojiPicker(false);
   };
 
+  const toggleMessageStyle = (style) => {
+    setMessageFontStyle(prev => ({
+      ...prev,
+      [style]: !prev[style]
+    }));
+  };
+
+  const colors = [
+    '#0000FF', '#FF0000', '#008000', '#FF00FF',
+    '#008B8B', '#800080', '#FFA500', '#000000', 'rainbow'
+  ];
+
+  const fonts = ['Arial', 'Comic Sans MS', 'Courier New', 'Times New Roman', 'Verdana'];
+
+  const fontSizes = ['10px', '12px', '14px', '16px', '18px', '20px', '24px'];
+
   const formatTime = (timestamp) => {
     const date = new Date(timestamp);
     return date.toLocaleTimeString('en-US', {
@@ -171,11 +194,12 @@ function ChatWindow({ socket, user, onLogout }) {
   };
 
   const getMessageStyle = (msg) => ({
-    color: msg.color || '#000000',
+    color: msg.messageColor !== 'rainbow' ? (msg.messageColor || '#000000') : undefined,
     fontFamily: msg.fontStyle?.fontFamily || 'Arial',
     fontWeight: msg.fontStyle?.bold ? 'bold' : 'normal',
     fontStyle: msg.fontStyle?.italic ? 'italic' : 'normal',
-    textDecoration: msg.fontStyle?.underline ? 'underline' : 'none'
+    textDecoration: msg.fontStyle?.underline ? 'underline' : 'none',
+    fontSize: msg.fontStyle?.fontSize || '14px'
   });
 
   return (
@@ -198,12 +222,30 @@ function ChatWindow({ socket, user, onLogout }) {
         <div className="users-sidebar">
           <div className="sidebar-header">Online ({users.length})</div>
           <div className="users-list">
-            {users.map((u) => (
-              <div key={u.id} className="user-item">
-                <div className="user-avatar"></div>
-                <span style={{ color: u.color }}>{u.username}</span>
-              </div>
-            ))}
+            {users.map((u) => {
+              // Helper function to lighten color for gradient
+              const getLighterColor = (hexColor) => {
+                if (hexColor === 'rainbow') return '';
+                // Convert hex to RGB, then lighten by adding to each component
+                const r = parseInt(hexColor.slice(1, 3), 16);
+                const g = parseInt(hexColor.slice(3, 5), 16);
+                const b = parseInt(hexColor.slice(5, 7), 16);
+                const lighter = (val) => Math.min(255, val + 80);
+                return `rgb(${lighter(r)}, ${lighter(g)}, ${lighter(b)})`;
+              };
+
+              return (
+                <div key={u.id} className="user-item">
+                  <div
+                    className={`user-avatar ${u.color === 'rainbow' ? 'rainbow-avatar' : ''}`}
+                    style={u.color !== 'rainbow' ? {
+                      background: `radial-gradient(circle at 30% 30%, ${getLighterColor(u.color)}, ${u.color})`
+                    } : {}}
+                  ></div>
+                  <span style={{ color: u.color }}>{u.username}</span>
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -221,10 +263,10 @@ function ChatWindow({ socket, user, onLogout }) {
                 {msg.type === 'user' && (
                   <div className="user-message">
                     <span className="message-time">{formatTime(msg.timestamp)}</span>
-                    <span className="username" style={{ color: msg.color }}>
+                    <span className={`username ${msg.usernameColor === 'rainbow' ? 'rainbow-text' : ''}`} style={{ color: msg.usernameColor !== 'rainbow' ? msg.usernameColor : undefined }}>
                       {msg.username}:
                     </span>
-                    <span className="message-text" style={getMessageStyle(msg)}>
+                    <span className={`message-text ${msg.messageColor === 'rainbow' ? 'rainbow-text' : ''}`} style={getMessageStyle(msg)}>
                       {parseMessageWithEmoticons(msg.text).map(part =>
                         part.type === 'text' ? (
                           <span key={part.key}>{part.content}</span>
@@ -271,6 +313,101 @@ function ChatWindow({ socket, user, onLogout }) {
               >
                 ⚡ Buzz
               </button>
+
+              <div className="toolbar-divider"></div>
+
+              <select
+                value={messageFontStyle.fontFamily}
+                onChange={(e) => setMessageFontStyle(prev => ({ ...prev, fontFamily: e.target.value }))}
+                className="format-select font-select-toolbar"
+                title="Font"
+              >
+                {fonts.map(font => (
+                  <option key={font} value={font}>{font}</option>
+                ))}
+              </select>
+
+              <select
+                value={messageFontStyle.fontSize || '14px'}
+                onChange={(e) => setMessageFontStyle(prev => ({ ...prev, fontSize: e.target.value }))}
+                className="format-select size-select"
+                title="Font Size"
+              >
+                {fontSizes.map(size => (
+                  <option key={size} value={size}>{size}</option>
+                ))}
+              </select>
+
+              <button
+                type="button"
+                className={`format-btn ${messageFontStyle.bold ? 'active' : ''}`}
+                onClick={() => toggleMessageStyle('bold')}
+                title="Bold"
+              >
+                <strong>B</strong>
+              </button>
+              <button
+                type="button"
+                className={`format-btn ${messageFontStyle.italic ? 'active' : ''}`}
+                onClick={() => toggleMessageStyle('italic')}
+                title="Italic"
+              >
+                <em>I</em>
+              </button>
+              <button
+                type="button"
+                className={`format-btn ${messageFontStyle.underline ? 'active' : ''}`}
+                onClick={() => toggleMessageStyle('underline')}
+                title="Underline"
+              >
+                <u>U</u>
+              </button>
+
+              <div className="color-picker-container">
+                <button
+                  type="button"
+                  className="color-btn"
+                  onClick={() => setShowColorPicker(!showColorPicker)}
+                  title="Text Color"
+                >
+                  <div
+                    className={`color-indicator ${messageColor === 'rainbow' ? 'rainbow-indicator' : ''}`}
+                    style={messageColor !== 'rainbow' ? { backgroundColor: messageColor } : {}}
+                  />
+                </button>
+                {showColorPicker && (
+                  <div className="color-dropdown">
+                    <div className="color-swatches-grid">
+                      {colors.map(c => (
+                        <button
+                          key={c}
+                          type="button"
+                          className={`color-swatch-toolbar ${messageColor === c ? 'selected' : ''} ${c === 'rainbow' ? 'rainbow' : ''}`}
+                          style={c !== 'rainbow' ? { backgroundColor: c } : {}}
+                          onClick={() => {
+                            setMessageColor(c);
+                            setShowColorPicker(false);
+                          }}
+                          title={c === 'rainbow' ? 'Rainbow' : c}
+                        />
+                      ))}
+                    </div>
+                    <div className="custom-color-picker">
+                      <label htmlFor="custom-color" className="custom-color-label">Custom:</label>
+                      <input
+                        id="custom-color"
+                        type="color"
+                        value={messageColor !== 'rainbow' && messageColor.startsWith('#') ? messageColor : '#000000'}
+                        onChange={(e) => {
+                          setMessageColor(e.target.value);
+                        }}
+                        className="custom-color-input"
+                        title="Pick custom color"
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
 
             {showEmojiPicker && (
