@@ -10,7 +10,9 @@ function App() {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    const serverUrl = import.meta.env.VITE_SERVER_URL || 'http://localhost:3001';
+    // In production, connect to the same origin. In dev, use localhost:3001
+    const serverUrl = import.meta.env.VITE_SERVER_URL ||
+      (import.meta.env.DEV ? 'http://localhost:3001' : window.location.origin);
     const newSocket = io(serverUrl);
     setSocket(newSocket);
 

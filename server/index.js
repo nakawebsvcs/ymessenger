@@ -26,9 +26,10 @@ if (process.env.NODE_ENV === 'production') {
 const io = new Server(httpServer, {
   cors: {
     origin: process.env.NODE_ENV === 'production'
-      ? process.env.CLIENT_URL
+      ? true  // Allow same-origin in production
       : "http://localhost:5173",
-    methods: ["GET", "POST"]
+    methods: ["GET", "POST"],
+    credentials: true
   }
 });
 
