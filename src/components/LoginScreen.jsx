@@ -1,0 +1,149 @@
+import { useState } from 'react';
+import './LoginScreen.css';
+
+function LoginScreen({ onLogin }) {
+  const [username, setUsername] = useState('');
+  const [color, setColor] = useState('#0000FF');
+  const [fontStyle, setFontStyle] = useState({
+    bold: false,
+    italic: false,
+    underline: false,
+    fontFamily: 'Arial'
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (username.trim()) {
+      onLogin({ username: username.trim(), color, fontStyle });
+    }
+  };
+
+  const toggleStyle = (style) => {
+    setFontStyle(prev => ({
+      ...prev,
+      [style]: !prev[style]
+    }));
+  };
+
+  const colors = [
+    '#0000FF', '#FF0000', '#00FF00', '#FF00FF',
+    '#00FFFF', '#800080', '#FFA500', '#000000'
+  ];
+
+  const fonts = ['Arial', 'Comic Sans MS', 'Courier New', 'Times New Roman', 'Verdana'];
+
+  return (
+    <div className="login-container">
+      <div className="login-box">
+        <div className="title-bar">
+          <div className="title-bar-text">YAHOO! Messenger</div>
+          <div className="title-bar-controls">
+            <button className="title-bar-button" aria-label="Minimize">_</button>
+            <button className="title-bar-button" aria-label="Maximize">□</button>
+            <button className="title-bar-button close" aria-label="Close">×</button>
+          </div>
+        </div>
+
+        <div className="window-body">
+          <div className="login-header">
+            <img src="/logo.png" alt="Yahoo! Messenger" className="ym-logo" />
+          </div>
+
+          <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Yahoo! ID:</label>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Enter your Yahoo! ID"
+              maxLength={20}
+              autoFocus
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Username Color:</label>
+            <div className="color-picker">
+              {colors.map(c => (
+                <button
+                  key={c}
+                  type="button"
+                  className={`color-swatch ${color === c ? 'selected' : ''}`}
+                  style={{ backgroundColor: c }}
+                  onClick={() => setColor(c)}
+                  title={c}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label>Font Style:</label>
+            <div className="font-controls">
+              <select
+                value={fontStyle.fontFamily}
+                onChange={(e) => setFontStyle(prev => ({ ...prev, fontFamily: e.target.value }))}
+                className="font-select"
+              >
+                {fonts.map(font => (
+                  <option key={font} value={font}>{font}</option>
+                ))}
+              </select>
+
+              <div className="style-buttons">
+                <button
+                  type="button"
+                  className={`style-btn ${fontStyle.bold ? 'active' : ''}`}
+                  onClick={() => toggleStyle('bold')}
+                  title="Bold"
+                >
+                  <strong>B</strong>
+                </button>
+                <button
+                  type="button"
+                  className={`style-btn ${fontStyle.italic ? 'active' : ''}`}
+                  onClick={() => toggleStyle('italic')}
+                  title="Italic"
+                >
+                  <em>I</em>
+                </button>
+                <button
+                  type="button"
+                  className={`style-btn ${fontStyle.underline ? 'active' : ''}`}
+                  onClick={() => toggleStyle('underline')}
+                  title="Underline"
+                >
+                  <u>U</u>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="preview">
+            <label>Preview:</label>
+            <div
+              className="preview-text"
+              style={{
+                color: color,
+                fontFamily: fontStyle.fontFamily,
+                fontWeight: fontStyle.bold ? 'bold' : 'normal',
+                fontStyle: fontStyle.italic ? 'italic' : 'normal',
+                textDecoration: fontStyle.underline ? 'underline' : 'none'
+              }}
+            >
+              {username || 'Your Username'}
+            </div>
+          </div>
+
+          <button type="submit" className="login-btn" disabled={!username.trim()}>
+            Sign In
+          </button>
+        </form>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default LoginScreen;

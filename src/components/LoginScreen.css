@@ -1,0 +1,228 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: url('/windows-bg.png');
+  background-size: 100% 100%;
+  background-position: center;
+}
+
+.login-box {
+  background: #D4D0C8; /* Lighter Windows system gray */
+  border: none;
+  box-shadow:
+    inset 1px 1px 0 #FFFFFF,
+    inset -1px -1px 0 #808080,
+    2px 2px 10px rgba(0, 0, 0, 0.4);
+  width: 100%;
+  max-width: 460px;
+  font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
+}
+
+/* Windows 98 Title Bar */
+.title-bar {
+  background: linear-gradient(to bottom, #A855F7 0%, #7C3AED 100%);
+  padding: 4px 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 32px;
+}
+
+.title-bar-text {
+  color: white;
+  font-weight: bold;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  padding-left: 6px;
+  font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
+}
+
+.title-bar-controls {
+  display: flex;
+  gap: 3px;
+}
+
+.title-bar-button {
+  width: 20px;
+  height: 18px;
+  background: #D4D0C8;
+  border: 1px solid;
+  border-color: #FFFFFF #000000 #000000 #FFFFFF;
+  font-size: 12px;
+  line-height: 1;
+  padding: 0;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.title-bar-button:active {
+  border-color: #000000 #FFFFFF #FFFFFF #000000;
+}
+
+.title-bar-button.close:hover {
+  background: #DC143C;
+  color: white;
+}
+
+/* Window Body */
+.window-body {
+  background: #D4D0C8;
+  padding: 24px;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.ym-logo {
+  max-width: 240px;
+  height: auto;
+  display: inline-block;
+}
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 7px;
+  color: #000000;
+  font-weight: normal;
+  font-size: 13px;
+  font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
+}
+
+.form-group input[type="text"] {
+  width: 100%;
+  padding: 5px 6px;
+  border: 2px solid;
+  border-color: #808080 #FFFFFF #FFFFFF #808080;
+  background: white;
+  font-size: 13px;
+  box-sizing: border-box;
+  font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
+}
+
+.form-group input[type="text"]:focus {
+  outline: 1px dotted #000000;
+  outline-offset: -2px;
+}
+
+.color-picker {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.color-swatch {
+  width: 28px;
+  height: 28px;
+  border: 2px solid;
+  border-color: #FFFFFF #808080 #808080 #FFFFFF;
+  cursor: pointer;
+}
+
+.color-swatch:active {
+  border-color: #808080 #FFFFFF #FFFFFF #808080;
+}
+
+.color-swatch.selected {
+  border: 2px solid #000000;
+  outline: 1px dotted #000000;
+  outline-offset: 1px;
+}
+
+.font-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.font-select {
+  flex: 1;
+  padding: 5px 6px;
+  border: 2px solid;
+  border-color: #808080 #FFFFFF #FFFFFF #808080;
+  background: white;
+  font-size: 13px;
+  font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
+}
+
+.style-buttons {
+  display: flex;
+  gap: 5px;
+}
+
+.style-btn {
+  width: 28px;
+  height: 26px;
+  border: 2px solid;
+  border-color: #FFFFFF #000000 #000000 #FFFFFF;
+  background: #D4D0C8;
+  cursor: pointer;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
+}
+
+.style-btn:active {
+  border-color: #000000 #FFFFFF #FFFFFF #000000;
+}
+
+.style-btn.active {
+  background: #000080; /* Classic Windows highlight blue */
+  color: white;
+  border-color: #000000 #808080 #808080 #000000;
+}
+
+.preview {
+  margin-bottom: 18px;
+  padding: 10px;
+  background: white;
+  border: 2px solid;
+  border-color: #808080 #FFFFFF #FFFFFF #808080;
+}
+
+.preview label {
+  display: block;
+  margin-bottom: 7px;
+  color: #000000;
+  font-size: 13px;
+  font-weight: normal;
+  font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
+}
+
+.preview-text {
+  font-size: 14px;
+  min-height: 20px;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 8px 14px;
+  background: #D4D0C8;
+  color: #000000;
+  border: 2px solid;
+  border-color: #FFFFFF #000000 #000000 #FFFFFF;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
+}
+
+.login-btn:active:not(:disabled) {
+  border-color: #000000 #FFFFFF #FFFFFF #000000;
+  padding: 9px 13px 7px 15px; /* Simulate button press */
+}
+
+.login-btn:disabled {
+  color: #808080;
+  cursor: not-allowed;
+  text-shadow: 1px 1px 0 #FFFFFF;
+}
