@@ -10,7 +10,12 @@ function ChatWindow({ socket, user, onLogout }) {
   const [messageColor, setMessageColor] = useState(user.color);
   const [messageFontStyle, setMessageFontStyle] = useState(user.fontStyle);
   const [showColorPicker, setShowColorPicker] = useState(false);
+  const [buzzCount, setBuzzCount] = useState(0);
+  const [buzzDisabled, setBuzzDisabled] = useState(false);
+  const [buzzCooldownSeconds, setBuzzCooldownSeconds] = useState(0);
   const messagesEndRef = useRef(null);
+  const messageInputRef = useRef(null);
+  const buzzCooldownIntervalRef = useRef(null);
 
   // Audio refs for all Yahoo! Messenger sounds
   const buzzAudioRef = useRef(null);
@@ -21,6 +26,15 @@ function ChatWindow({ socket, user, onLogout }) {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Cleanup buzz cooldown interval on unmount
+  useEffect(() => {
+    return () => {
+      if (buzzCooldownIntervalRef.current) {
+        clearInterval(buzzCooldownIntervalRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     socket.on('message:receive', (message) => {
@@ -160,12 +174,42 @@ function ChatWindow({ socket, user, onLogout }) {
   };
 
   const handleBuzz = () => {
+    if (buzzDisabled) return;
+
+    const newCount = buzzCount + 1;
+    setBuzzCount(newCount);
     socket.emit('buzz:send', { username: user.username });
+
+    // If reached 5 buzzes, disable for 1 minute
+    if (newCount >= 5) {
+      setBuzzDisabled(true);
+      setBuzzCooldownSeconds(60);
+
+      // Clear any existing interval
+      if (buzzCooldownIntervalRef.current) {
+        clearInterval(buzzCooldownIntervalRef.current);
+      }
+
+      // Update countdown every second
+      buzzCooldownIntervalRef.current = setInterval(() => {
+        setBuzzCooldownSeconds(prev => {
+          if (prev <= 1) {
+            clearInterval(buzzCooldownIntervalRef.current);
+            setBuzzDisabled(false);
+            setBuzzCount(0);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
   };
 
   const insertEmoticon = (shortcut) => {
     setMessageInput(prev => prev + shortcut);
     setShowEmojiPicker(false);
+    // Auto-focus the message input after inserting emoticon
+    messageInputRef.current?.focus();
   };
 
   const toggleMessageStyle = (style) => {
@@ -336,9 +380,9 @@ function ChatWindow({ socket, user, onLogout }) {
                 type="button"
                 className="toolbar-btn buzz-btn"
                 onClick={handleBuzz}
-                title="Send Buzz"
+                disabled={buzzDisabled}
               >
-                ⚡ Buzz
+                {buzzDisabled ? `⚡ Buzz (${buzzCooldownSeconds}s)` : '⚡ Buzz'}
               </button>
 
               <div className="toolbar-divider"></div>
@@ -459,6 +503,7 @@ function ChatWindow({ socket, user, onLogout }) {
 
             <form onSubmit={handleSendMessage} className="message-form">
               <input
+                ref={messageInputRef}
                 type="text"
                 value={messageInput}
                 onChange={(e) => setMessageInput(e.target.value)}

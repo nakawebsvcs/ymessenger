@@ -269,6 +269,17 @@
   color: #ff6600;
 }
 
+.buzz-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  color: #999;
+}
+
+.buzz-btn:disabled:hover {
+  background: white;
+  border-color: #ccc;
+}
+
 .toolbar-emoticon {
   height: 18px;
   width: auto;
