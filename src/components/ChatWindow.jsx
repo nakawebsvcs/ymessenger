@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { emoticons, getAllEmoticons } from '../utils/emoticons';
 import './ChatWindow.css';
 
-function ChatWindow({ socket, user, onLogout }) {
+function ChatWindow({ socket, user, onLogout, roomId }) {
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState('');
   const [users, setUsers] = useState([]);
@@ -262,6 +262,7 @@ function ChatWindow({ socket, user, onLogout }) {
         <div className="header-left">
           <img src="/favicon.svg" alt="Y!" className="header-logo" />
           <span className="header-title">Yahoo! Messenger</span>
+          {roomId && <span className="room-code-display">Room: {roomId}</span>}
         </div>
         <div className="header-right">
           <button className="print-btn" onClick={handlePrintChat}>Print Chat</button>

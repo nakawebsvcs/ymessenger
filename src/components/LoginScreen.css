@@ -96,7 +96,7 @@
 }
 
 .ym-logo {
-  max-width: 240px;
+  max-width: 180px;
   height: auto;
   display: inline-block;
 }
@@ -303,6 +303,226 @@
   color: #888;
   cursor: not-allowed;
   box-shadow: none;
+}
+
+/* Chat Type Selector */
+.chat-type-selector {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 0;
+}
+
+.chat-type-btn {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #999;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.chat-type-btn:hover {
+  background: #f0f0f0;
+  border-color: #777;
+}
+
+.chat-type-btn.active {
+  background: linear-gradient(to bottom, #BC96ED, #7F67C8);
+  color: white;
+  border-color: #6540B3;
+}
+
+/* Room Mode Selector */
+.room-mode-selector {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.mode-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #999;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
+  transition: all 0.2s;
+}
+
+.mode-btn:hover {
+  background: #f0f0f0;
+  border-color: #777;
+}
+
+.mode-btn.active {
+  background: linear-gradient(to bottom, #BC96ED, #7F67C8);
+  color: white;
+  border-color: #6540B3;
+}
+
+.room-code-input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #999;
+  border-radius: 4px;
+  background: white;
+  font-size: 13px;
+  box-sizing: border-box;
+  font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
+  text-align: center;
+  letter-spacing: 2px;
+  font-weight: bold;
+  margin-top: 8px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.room-code-input:focus {
+  outline: none;
+  border-color: #7C3AED;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.room-modal {
+  background: #D4D0C8;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  width: 90%;
+  max-width: 400px;
+  overflow: hidden;
+}
+
+.modal-header {
+  background: linear-gradient(to bottom, #BC96ED 0%, #6540B3 50%, #BC96ED 100%);
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0;
+  font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
+}
+
+.modal-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  transition: background 0.2s;
+}
+
+.modal-close:hover {
+  background: #DC143C;
+  border-color: #B00020;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.room-code-field {
+  margin-top: 16px;
+}
+
+.room-code-field label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: normal;
+  font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
+}
+
+.room-info {
+  margin-top: 16px;
+  padding: 12px;
+  background: rgba(101, 64, 179, 0.1);
+  border: 1px solid rgba(101, 64, 179, 0.3);
+  border-radius: 4px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #333;
+  font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
+}
+
+.modal-footer {
+  padding: 16px 20px;
+  background: #C0C0C0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  border-top: 1px solid #999;
+}
+
+.modal-cancel-btn,
+.modal-submit-btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 600;
+}
+
+.modal-cancel-btn {
+  background: white;
+  border: 1px solid #999;
+  color: #333;
+}
+
+.modal-cancel-btn:hover {
+  background: #f0f0f0;
+  border-color: #777;
+}
+
+.modal-submit-btn {
+  background: linear-gradient(to bottom, #BC96ED, #7F67C8);
+  color: white;
+  border: 1px solid #6540B3;
+}
+
+.modal-submit-btn:hover:not(:disabled) {
+  background: linear-gradient(to bottom, #7F67C8, #6540B3);
+}
+
+.modal-submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.chat-type-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* Responsive background sizing */

@@ -10,12 +10,42 @@ function LoginScreen({ onLogin }) {
     underline: false,
     fontFamily: 'Arial'
   });
+  const [roomCode, setRoomCode] = useState('');
+  const [showRoomModal, setShowRoomModal] = useState(false);
+  const [mode, setMode] = useState('create'); // 'create' or 'join'
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (username.trim()) {
-      onLogin({ username: username.trim(), color, fontStyle });
+  const handleChatTypeSelect = (type) => {
+    if (type === 'private') {
+      setShowRoomModal(true);
+    } else {
+      // Public chat - submit immediately if username is filled
+      if (username.trim()) {
+        onLogin({
+          username: username.trim(),
+          color,
+          fontStyle,
+          chatType: 'public',
+          mode: null,
+          roomCode: null
+        });
+      }
     }
+  };
+
+  const handleRoomSubmit = () => {
+    if (mode === 'join' && !roomCode.trim()) {
+      return;
+    }
+
+    setShowRoomModal(false);
+    onLogin({
+      username: username.trim(),
+      color,
+      fontStyle,
+      chatType: 'private',
+      mode,
+      roomCode: mode === 'join' ? roomCode.trim().toUpperCase() : null
+    });
   };
 
   const toggleStyle = (style) => {
@@ -52,7 +82,7 @@ function LoginScreen({ onLogin }) {
             <img src="/logo.png" alt="Yahoo! Messenger" className="ym-logo" />
           </div>
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={(e) => e.preventDefault()}>
           <div className="form-group">
             <label>Yahoo! ID:</label>
             <input
@@ -139,10 +169,90 @@ function LoginScreen({ onLogin }) {
             </div>
           </div>
 
-          <button type="submit" className="login-btn" disabled={!username.trim()}>
-            Sign In
-          </button>
+          <div className="form-group">
+            <div className="chat-type-selector">
+              <button
+                type="button"
+                className="chat-type-btn"
+                onClick={() => handleChatTypeSelect('public')}
+                disabled={!username.trim()}
+              >
+                Public Chat
+              </button>
+              <button
+                type="button"
+                className="chat-type-btn"
+                onClick={() => handleChatTypeSelect('private')}
+                disabled={!username.trim()}
+              >
+                Private Chat
+              </button>
+            </div>
+          </div>
         </form>
+
+        {/* Room Modal */}
+        {showRoomModal && (
+          <div className="modal-overlay" onClick={() => setShowRoomModal(false)}>
+            <div className="room-modal" onClick={(e) => e.stopPropagation()}>
+              <div className="modal-header">
+                <h3>Private Chat Room</h3>
+                <button className="modal-close" onClick={() => setShowRoomModal(false)}>×</button>
+              </div>
+
+              <div className="modal-body">
+                <div className="room-mode-selector">
+                  <button
+                    type="button"
+                    className={`mode-btn ${mode === 'create' ? 'active' : ''}`}
+                    onClick={() => setMode('create')}
+                  >
+                    Create Room
+                  </button>
+                  <button
+                    type="button"
+                    className={`mode-btn ${mode === 'join' ? 'active' : ''}`}
+                    onClick={() => setMode('join')}
+                  >
+                    Join Room
+                  </button>
+                </div>
+
+                {mode === 'join' && (
+                  <div className="room-code-field">
+                    <label>Room Code:</label>
+                    <input
+                      type="text"
+                      value={roomCode}
+                      onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
+                      placeholder="Enter Code"
+                      maxLength={6}
+                      className="room-code-input"
+                      autoFocus
+                    />
+                  </div>
+                )}
+
+                {mode === 'create' && (
+                  <p className="room-info">Share your unique room code with others to allow them to join.</p>
+                )}
+              </div>
+
+              <div className="modal-footer">
+                <button className="modal-cancel-btn" onClick={() => setShowRoomModal(false)}>
+                  Cancel
+                </button>
+                <button
+                  className="modal-submit-btn"
+                  onClick={handleRoomSubmit}
+                  disabled={mode === 'join' && !roomCode.trim()}
+                >
+                  {mode === 'create' ? 'Create & Join' : 'Join Room'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         </div>
       </div>
     </div>
