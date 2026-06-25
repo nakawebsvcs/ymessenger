@@ -125,8 +125,12 @@ function ChatWindow({ socket, user, onLogout, roomId }) {
       let foundIndex = currentText.length;
       let foundKey = null;
 
+      // Sort emoticons by length (longest first) to match longer patterns before shorter ones
+      // This prevents ":o" from matching before ":oops:"
+      const sortedEmoticons = Object.entries(emoticons).sort((a, b) => b[0].length - a[0].length);
+
       // Find the earliest emoticon in the remaining text
-      Object.entries(emoticons).forEach(([key, value]) => {
+      sortedEmoticons.forEach(([key, value]) => {
         const idx = currentText.indexOf(key);
         if (idx !== -1 && idx < foundIndex) {
           foundIndex = idx;
