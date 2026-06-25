@@ -202,6 +202,10 @@ function ChatWindow({ socket, user, onLogout }) {
     fontSize: msg.fontStyle?.fontSize || '14px'
   });
 
+  const handlePrintChat = () => {
+    window.print();
+  };
+
   return (
     <div className="chat-container">
       {/* Yahoo! Messenger authentic sounds */}
@@ -215,7 +219,10 @@ function ChatWindow({ socket, user, onLogout }) {
           <img src="/favicon.svg" alt="Y!" className="header-logo" />
           <span className="header-title">Yahoo! Messenger</span>
         </div>
-        <button className="logout-btn" onClick={onLogout}>Sign Out</button>
+        <div className="header-right">
+          <button className="print-btn" onClick={handlePrintChat}>Print Chat</button>
+          <button className="logout-btn" onClick={onLogout}>Sign Out</button>
+        </div>
       </div>
 
       <div className="chat-body">
