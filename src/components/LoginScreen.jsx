@@ -36,7 +36,10 @@ function LoginScreen({ onLogin }) {
     <div className="login-container">
       <div className="login-box">
         <div className="title-bar">
-          <div className="title-bar-text">YAHOO! Messenger</div>
+          <div className="title-bar-text">
+            <img src="/favicon.svg" alt="Y!" className="title-bar-logo" />
+            YAHOO! Messenger
+          </div>
           <div className="title-bar-controls">
             <button className="title-bar-button" aria-label="Minimize">_</button>
             <button className="title-bar-button" aria-label="Maximize">□</button>

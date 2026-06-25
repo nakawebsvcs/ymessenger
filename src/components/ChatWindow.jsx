@@ -212,7 +212,7 @@ function ChatWindow({ socket, user, onLogout }) {
 
       <div className="chat-header">
         <div className="header-left">
-          <span className="ym-logo-small">Y!</span>
+          <img src="/favicon.svg" alt="Y!" className="header-logo" />
           <span className="header-title">Yahoo! Messenger</span>
         </div>
         <button className="logout-btn" onClick={onLogout}>Sign Out</button>

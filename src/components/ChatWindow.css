@@ -31,6 +31,11 @@
   gap: 10px;
 }
 
+.header-logo {
+  width: 28px;
+  height: 28px;
+}
+
 .ym-logo-small {
   font-size: 24px;
   font-weight: bold;

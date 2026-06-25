@@ -40,6 +40,14 @@
   letter-spacing: 0.5px;
   padding-left: 6px;
   font-family: 'MS Sans Serif', Tahoma, Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.title-bar-logo {
+  width: 20px;
+  height: 20px;
 }
 
 .title-bar-controls {
