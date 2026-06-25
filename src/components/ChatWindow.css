@@ -352,7 +352,7 @@
 
 .send-btn {
   padding: 10px 20px;
-  background: #6001D2;
+  background: linear-gradient(to bottom, #BC96ED 0%, #6540B3 50%, #BC96ED 100%);
   color: white;
   border: none;
   border-radius: 3px;
