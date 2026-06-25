@@ -223,23 +223,43 @@ function ChatWindow({ socket, user, onLogout }) {
           <div className="sidebar-header">Online ({users.length})</div>
           <div className="users-list">
             {users.map((u) => {
-              // Helper function to lighten color for gradient
-              const getLighterColor = (hexColor) => {
-                if (hexColor === 'rainbow') return '';
-                // Convert hex to RGB, then lighten by adding to each component
+              // Helper function to create gradient colors
+              const getGradientColors = (hexColor) => {
+                if (hexColor === 'rainbow') return { light: '', dark: '' };
+
+                // Convert hex to RGB
                 const r = parseInt(hexColor.slice(1, 3), 16);
                 const g = parseInt(hexColor.slice(3, 5), 16);
                 const b = parseInt(hexColor.slice(5, 7), 16);
-                const lighter = (val) => Math.min(255, val + 80);
-                return `rgb(${lighter(r)}, ${lighter(g)}, ${lighter(b)})`;
+
+                // Calculate brightness
+                const brightness = (r + g + b) / 3;
+
+                // For bright colors, darken instead of lighten
+                if (brightness > 180) {
+                  const darker = (val) => Math.max(0, val - 60);
+                  return {
+                    light: `rgb(${r}, ${g}, ${b})`,
+                    dark: `rgb(${darker(r)}, ${darker(g)}, ${darker(b)})`
+                  };
+                } else {
+                  // For dark colors, lighten
+                  const lighter = (val) => Math.min(255, val + 80);
+                  return {
+                    light: `rgb(${lighter(r)}, ${lighter(g)}, ${lighter(b)})`,
+                    dark: `rgb(${r}, ${g}, ${b})`
+                  };
+                }
               };
+
+              const gradientColors = getGradientColors(u.color);
 
               return (
                 <div key={u.id} className="user-item">
                   <div
                     className={`user-avatar ${u.color === 'rainbow' ? 'rainbow-avatar' : ''}`}
                     style={u.color !== 'rainbow' ? {
-                      background: `radial-gradient(circle at 30% 30%, ${getLighterColor(u.color)}, ${u.color})`
+                      background: `radial-gradient(circle at 30% 30%, ${gradientColors.light}, ${gradientColors.dark})`
                     } : {}}
                   ></div>
                   <span style={{ color: u.color }}>{u.username}</span>

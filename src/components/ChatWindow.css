@@ -19,7 +19,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(to bottom, #A855F7 0%, #7C3AED 100%);
+  background: linear-gradient(to bottom, #BC96ED 0%, #6540B3 50%, #BC96ED 100%);
   color: white;
   padding: 10px 15px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
