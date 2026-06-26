@@ -582,70 +582,120 @@
   padding: 2px;
 }
 
-/* Print Styles */
+/* Print View Styles */
+.print-view {
+  display: none;
+  background: white;
+  padding: 40px;
+}
+
+.print-view.active {
+  display: block;
+}
+
+.print-view-header {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 3px solid #6540B3;
+  color: #6540B3;
+  text-align: center;
+}
+
+.print-view-messages {
+  max-width: 100%;
+}
+
+.print-view .message {
+  margin-bottom: 10px;
+  page-break-inside: avoid;
+}
+
+.print-view .system-message {
+  text-align: center;
+  color: #666;
+  font-size: 12px;
+  font-style: italic;
+  padding: 5px 0;
+}
+
+.print-view .user-message {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  line-height: 1.5;
+}
+
+.print-view .message-time {
+  color: #999;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+.print-view .username {
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.print-view .message-text {
+  word-wrap: break-word;
+  word-break: break-word;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+.print-view .emoticon {
+  display: inline-block;
+  height: 20px;
+  width: auto;
+  max-width: none;
+  vertical-align: middle;
+  margin: 0 2px;
+}
+
+.print-view .rainbow-text {
+  background: linear-gradient(
+    90deg,
+    #FF0000 0%,
+    #FF7F00 16.67%,
+    #D4AF37 33.33%,
+    #00B300 50%,
+    #0000FF 66.67%,
+    #4B0082 83.33%,
+    #9400D3 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 @media print {
-  /* Hide UI elements */
-  .chat-header,
-  .users-sidebar,
-  .input-container,
-  .toolbar,
-  .emoji-picker {
-    display: none !important;
+  body * {
+    visibility: hidden;
   }
 
-  /* Full width for messages */
-  .chat-container {
-    height: auto;
-    background: white;
+  .print-view,
+  .print-view * {
+    visibility: visible;
   }
 
-  .chat-body {
-    display: block;
-  }
-
-  .chat-main {
+  .print-view {
+    position: absolute;
+    left: 0;
+    top: 0;
     width: 100%;
-  }
-
-  .messages-container {
-    overflow: visible;
     padding: 20px;
   }
 
-  /* Remove animations */
-  .message {
-    animation: none;
-  }
-
-  /* Ensure colors print correctly */
-  .message-text,
-  .username,
-  .rainbow-text {
+  .print-view .message-text,
+  .print-view .username,
+  .print-view .rainbow-text,
+  .print-view .emoticon {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
     color-adjust: exact;
-  }
-
-  /* Add page breaks for long chats */
-  .message {
-    page-break-inside: avoid;
-  }
-
-  /* Add a header for the printed page */
-  .messages-container::before {
-    content: "Yahoo! Messenger Chat History";
-    display: block;
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #6540B3;
-    color: #6540B3;
-  }
-
-  /* Ensure emoticons print */
-  .emoticon {
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
   }
 }
