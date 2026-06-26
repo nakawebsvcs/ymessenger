@@ -13,6 +13,7 @@ function ChatWindow({ socket, user, onLogout }) {
   const [buzzCount, setBuzzCount] = useState(0);
   const [buzzDisabled, setBuzzDisabled] = useState(false);
   const [buzzCooldownSeconds, setBuzzCooldownSeconds] = useState(0);
+  const [buzzMaxoutCount, setBuzzMaxoutCount] = useState(0);
   const messagesEndRef = useRef(null);
   const messageInputRef = useRef(null);
   const buzzCooldownIntervalRef = useRef(null);
@@ -184,10 +185,15 @@ function ChatWindow({ socket, user, onLogout }) {
     setBuzzCount(newCount);
     socket.emit('buzz:send', { username: user.username });
 
-    // If reached 5 buzzes, disable for 1 minute
+    // If reached 5 buzzes, disable for cooldown period
     if (newCount >= 5) {
+      const newMaxoutCount = buzzMaxoutCount + 1;
+      setBuzzMaxoutCount(newMaxoutCount);
       setBuzzDisabled(true);
-      setBuzzCooldownSeconds(60);
+
+      // Determine cooldown duration: 30 minutes (1800s) after 3rd maxout, 1 minute (60s) otherwise
+      const cooldownDuration = newMaxoutCount >= 3 ? 1800 : 60;
+      setBuzzCooldownSeconds(cooldownDuration);
 
       // Clear any existing interval
       if (buzzCooldownIntervalRef.current) {
@@ -201,6 +207,10 @@ function ChatWindow({ socket, user, onLogout }) {
             clearInterval(buzzCooldownIntervalRef.current);
             setBuzzDisabled(false);
             setBuzzCount(0);
+            // Reset maxout count after completing the 30-minute penalty
+            if (newMaxoutCount >= 3) {
+              setBuzzMaxoutCount(0);
+            }
             return 0;
           }
           return prev - 1;
@@ -230,7 +240,7 @@ function ChatWindow({ socket, user, onLogout }) {
 
   const fonts = ['Arial', 'Comic Sans MS', 'Courier New', 'Times New Roman', 'Verdana'];
 
-  const fontSizes = ['10px', '12px', '14px', '16px', '18px', '20px', '24px'];
+  const fontSizes = ['12px', '14px', '16px', '18px', '20px', '24px'];
 
   const formatTime = (timestamp) => {
     const date = new Date(timestamp);
@@ -239,6 +249,15 @@ function ChatWindow({ socket, user, onLogout }) {
       minute: '2-digit',
       hour12: true
     });
+  };
+
+  const formatCooldownTime = (seconds) => {
+    if (seconds >= 60) {
+      const minutes = Math.floor(seconds / 60);
+      const remainingSeconds = seconds % 60;
+      return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+    }
+    return `${seconds}s`;
   };
 
   const getMessageStyle = (msg) => ({
@@ -317,7 +336,7 @@ function ChatWindow({ socket, user, onLogout }) {
                       background: `radial-gradient(circle at 30% 30%, ${gradientColors.light}, ${gradientColors.dark})`
                     } : {}}
                   ></div>
-                  <span style={{ color: u.color }}>{u.username}</span>
+                  <span className={u.color === 'rainbow' ? 'rainbow-text' : ''} style={u.color !== 'rainbow' ? { color: u.color } : {}}>{u.username}</span>
                 </div>
               );
             })}
@@ -386,7 +405,7 @@ function ChatWindow({ socket, user, onLogout }) {
                 onClick={handleBuzz}
                 disabled={buzzDisabled}
               >
-                {buzzDisabled ? `⚡ Buzz (${buzzCooldownSeconds}s)` : '⚡ Buzz'}
+                {buzzDisabled ? `⚡ Buzz (${formatCooldownTime(buzzCooldownSeconds)})` : '⚡ Buzz'}
               </button>
 
               <div className="toolbar-divider"></div>
