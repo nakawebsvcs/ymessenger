@@ -270,7 +270,14 @@ function ChatWindow({ socket, user, onLogout }) {
   });
 
   const handlePrintChat = () => {
-    window.print();
+    const printView = document.querySelector('.print-view');
+    if (printView) {
+      printView.classList.add('active');
+      setTimeout(() => {
+        window.print();
+        printView.classList.remove('active');
+      }, 100);
+    }
   };
 
   return (
@@ -538,6 +545,54 @@ function ChatWindow({ socket, user, onLogout }) {
               </button>
             </form>
           </div>
+        </div>
+      </div>
+
+      {/* Hidden print view */}
+      <div className="print-view">
+        <div className="print-view-header">Yahoo! Messenger Chat History</div>
+        <div className="print-view-messages">
+          {messages.map((msg, index) => (
+            <div key={index} className={`message message-${msg.type}`}>
+              {msg.type === 'system' && (
+                <div className="system-message">
+                  <span>{msg.text}</span>
+                  <span className="timestamp"> - {formatTime(msg.timestamp)}</span>
+                </div>
+              )}
+
+              {msg.type === 'user' && (
+                <div className="user-message">
+                  <span className="message-time">{formatTime(msg.timestamp)}</span>
+                  <span className={`username ${msg.usernameColor === 'rainbow' ? 'rainbow-text' : ''}`} style={{ color: msg.usernameColor !== 'rainbow' ? msg.usernameColor : undefined }}>
+                    {msg.username}:
+                  </span>
+                  <span className={`message-text ${msg.messageColor === 'rainbow' ? 'rainbow-text' : ''}`} style={getMessageStyle(msg)}>
+                    {parseMessageWithEmoticons(msg.text).map(part =>
+                      part.type === 'text' ? (
+                        <span key={part.key}>{part.content}</span>
+                      ) : (
+                        <img
+                          key={part.key}
+                          src={part.content.gif}
+                          alt={part.content.name}
+                          className="emoticon"
+                          title={part.content.name}
+                        />
+                      )
+                    )}
+                  </span>
+                </div>
+              )}
+
+              {msg.type === 'buzz' && (
+                <div className="user-message">
+                  <span className="message-time">{formatTime(msg.timestamp)}</span>
+                  <span className="buzz-text">BUZZ!!!</span>
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       </div>
     </div>
