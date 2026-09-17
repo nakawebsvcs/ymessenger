@@ -128,14 +128,13 @@ See **[SOUNDS.md](SOUNDS.md)** for the complete list of sounds and future enhanc
 - **Real-time**: Socket.io
 - **Styling**: CSS3 with custom animations
 
-## Future Enhancements
+## Future Enhancement Ideas
 
 - Private messaging between users
 - Chat history persistence
 - User avatars/profile pictures
 - File sharing
 - Voice messages
-- Custom emoticon uploads
 - Chat rooms/channels
 - User authentication with passwords
 
